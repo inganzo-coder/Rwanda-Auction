@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Active Auctions - RwandaGov</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #1e3a8a;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      position: relative;
+    }
+    .back-home {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: white;
+      color: #1e3a8a;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+    .auction-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    .auction-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #1e3a8a;
+    }
+    .auction-details {
+      margin: 1rem 0;
+      color: #333;
+    }
+    .timer {
+      color: #dc2626;
+      font-weight: bold;
+    }
+    .bid-form {
+      margin-top: 1rem;
+    }
+    .bid-form input[type="number"] {
+      padding: 0.5rem;
+      font-size: 1rem;
+      width: 200px;
+      margin-right: 1rem;
+    }
+    .bid-form label {
+      margin-right: 1rem;
+    }
+    .bid-form button {
+      padding: 0.5rem 1rem;
+      background: #10b981;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .bid-form button:hover {
+      background: #059669;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="back-home"><i class="fas fa-home"></i> Home</a>
+    <h1>🟢 Live Active Auctions - RwandaGov</h1>
+    <p>Real-time bidding platform for government assets</p>
+  </header>
+
+  <div class="container" id="auctionContainer">
+    <!-- Active auctions will load here -->
+  </div>
+
+  <script>
+    const activeAuctions = [
+      {
+        id: 'RWA2025001',
+        title: 'Government Land Plot - Kigali East',
+        basePrice: 85000000,
+        currentBid: 127000000,
+        timeLeft: 3540 // in seconds
+      },
+      {
+        id: 'RWA2025002',
+        title: 'Government Vehicle - Toyota Hilux 2019',
+        basePrice: 18000000,
+        currentBid: 24500000,
+        timeLeft: 2940
+      }
+    ];
+
+    function formatTime(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    function renderAuctions() {
+      const container = document.getElementById('auctionContainer');
+      activeAuctions.forEach((auction, index) => {
+        const div = document.createElement('div');
+        div.className = 'auction-card';
+
+        div.innerHTML = `
+          <div class="auction-title">${auction.title}</div>
+          <div class="auction-details">
+            <p><strong>ID:</strong> ${auction.id}</p>
+            <p><strong>Base Price:</strong> RWF ${auction.basePrice.toLocaleString()}</p>
+            <p><strong>Current Bid:</strong> RWF ${auction.currentBid.toLocaleString()}</p>
+            <p><strong>Time Left:</strong> <span class="timer" id="timer-${index}">${formatTime(auction.timeLeft)}</span></p>
+          </div>
+          <div class="bid-form">
+            <input type="number" placeholder="Your bid (RWF)" min="${auction.currentBid + 100000}"/>
+            <label><input type="checkbox" required/> I confirm my identity</label>
+            <button onclick="alert('Bid placed successfully')">Place Bid</button>
+          </div>
+        `;
+
+        container.appendChild(div);
+
+        setInterval(() => {
+          if (auction.timeLeft > 0) {
+            auction.timeLeft--;
+            document.getElementById(`timer-${index}`).textContent = formatTime(auction.timeLeft);
+          } else {
+            document.getElementById(`timer-${index}`).textContent = 'AUCTION ENDED';
+          }
+        }, 1000);
+      });
+    }
+
+    renderAuctions();
+  </script>
+</body>
+</html>
