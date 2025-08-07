@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -78,6 +77,28 @@
     .bid-form button:hover {
       background: #059669;
     }
+    .news-section {
+      background: #fff7ed;
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      border-left: 6px solid #f97316;
+    }
+    .news-section h3 {
+      margin-top: 0;
+      color: #b45309;
+    }
+    .external-auctions {
+      background: #e0f2fe;
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      border-left: 6px solid #0284c7;
+    }
+    .external-auctions h3 {
+      margin-top: 0;
+      color: #0369a1;
+    }
   </style>
 </head>
 <body>
@@ -87,8 +108,22 @@
     <p>Real-time bidding platform for government assets</p>
   </header>
 
-  <div class="container" id="auctionContainer">
-    <!-- Active auctions will load here -->
+  <div class="container">
+    <div id="newsSection" class="news-section">
+      <h3>📢 Latest Auction News from Rwanda National Police</h3>
+      <p id="newsContent">Loading latest news...</p>
+    </div>
+
+    <div id="externalAuctions" class="external-auctions">
+      <h3>🌍 Auctions from Other Verified Sources</h3>
+      <ul id="externalAuctionList">
+        <li>Loading tenders from external sources...</li>
+      </ul>
+    </div>
+
+    <div id="auctionContainer">
+      <!-- Active auctions will load here -->
+    </div>
   </div>
 
   <script>
@@ -149,7 +184,25 @@
       });
     }
 
+    function loadNews() {
+      const newsContent = document.getElementById("newsContent");
+      newsContent.innerHTML = `The <strong>Rwanda National Police</strong> has announced that the <a href="https://police.gov.rw/media/news-detail/news/auctioning-of-impounded-automobiles-still-open-in-kigali/" target="_blank">auctioning of impounded automobiles</a> in Kigali remains open. Interested buyers are encouraged to visit Kacyiru police compound before the deadline.`;
+    }
+
+    function loadExternalAuctions() {
+      const list = document.getElementById("externalAuctionList");
+      list.innerHTML = `
+        <li><a href="https://www.cyizere.com/tenders/in-rwanda" target="_blank">📌 Cyizere Rwanda - Current Tenders</a></li>
+        <li><a href="https://www.rppa.gov.rw/index.php?id=84" target="_blank">📌 RPPA - National Tender Notices</a></li>
+        <li><a href="https://umucyo.gov.rw/umucyo/public-notice" target="_blank">📌 UMUCYO e-Procurement Portal</a></li>
+        <li><a href="https://minagri.gov.rw/index.php?id=51" target="_blank">📌 MINAGRI - Agricultural Asset Auctions</a></li>
+        <li><a href="https://rdb.rw/news/" target="_blank">📌 RDB - Investment Auctions & Notices</a></li>
+      `;
+    }
+
     renderAuctions();
+    loadNews();
+    loadExternalAuctions();
   </script>
 </body>
 </html>
