@@ -365,18 +365,191 @@
       border: 1px solid #059669;
     }
 
-    .kyc-form {
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
       display: none;
-      background: rgba(255,255,255,0.05);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .popup-overlay.active {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .verification-popup {
+      background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+      border: 2px solid #333;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      animation: slideUp 0.4s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    @keyframes slideUp {
+      from { 
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .popup-header {
+      background: linear-gradient(90deg, #000000, #1a1a1a);
       padding: 1.5rem;
-      border-radius: 12px;
-      margin: 1rem 0;
+      border-bottom: 1px solid #333;
+      border-radius: 18px 18px 0 0;
+      position: relative;
+    }
+
+    .close-popup {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid #333;
+      color: #fff;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .close-popup:hover {
+      background: rgba(255,255,255,0.2);
+      transform: rotate(90deg);
+    }
+
+    .popup-content {
+      padding: 2rem;
+    }
+
+    .verification-steps {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: relative;
+    }
+
+    .step::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background: #333;
+      z-index: -1;
+    }
+
+    .step:last-child::after {
+      display: none;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #333;
+      color: #aaa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .step.active .step-number {
+      background: #ffffff;
+      color: #000;
+      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+    }
+
+    .step.completed .step-number {
+      background: #10b981;
+      color: white;
+    }
+
+    .step-title {
+      font-size: 0.8rem;
+      color: #aaa;
+      text-align: center;
+    }
+
+    .step.active .step-title {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .verification-form {
+      background: rgba(255,255,255,0.02);
+      padding: 2rem;
+      border-radius: 16px;
       border: 1px solid #333;
     }
 
-    .kyc-form.active {
+    .success-animation {
+      text-align: center;
+      padding: 3rem;
+      display: none;
+    }
+
+    .success-animation.show {
       display: block;
-      animation: slideDown 0.3s ease;
+      animation: bounceIn 0.6s ease;
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.3); opacity: 0; }
+      50% { transform: scale(1.05); }
+      70% { transform: scale(0.9); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .checkmark {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #10b981;
+      margin: 0 auto 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: white;
+      animation: pulse 2s infinite;
     }
 
     @keyframes slideDown {
@@ -568,59 +741,9 @@
             <i class="fas fa-lock"></i> Verification required to place bids
           </div>
           
-          <button class="send-button" onclick="startKYC()" id="kycButton">
+          <button class="send-button" onclick="openVerificationPopup()" id="kycButton">
             <i class="fas fa-user-check"></i> Start Verification Process
           </button>
-          
-          <div id="kycForm" class="kyc-form">
-            <h4 style="margin-bottom: 1rem; color: #fff;">
-              <i class="fas fa-id-card"></i> Bidder Verification (KYC)
-            </h4>
-            <p style="color: #aaa; margin-bottom: 1rem; font-size: 0.9rem;">
-              Complete verification to ensure secure bidding environment
-            </p>
-            
-            <div class="form-grid">
-              <div class="input-group">
-                <label class="input-label">Full Name</label>
-                <input type="text" id="fullName" class="input-field" placeholder="John Doe">
-              </div>
-              <div class="input-group">
-                <label class="input-label">National ID</label>
-                <input type="text" id="nationalId" class="input-field" placeholder="1 XXXX X XXXXXXX X XX">
-              </div>
-            </div>
-            
-            <div class="form-grid">
-              <div class="input-group">
-                <label class="input-label">Phone Number</label>
-                <input type="tel" id="phoneNumber" class="input-field" placeholder="+250 7XX XXX XXX">
-              </div>
-              <div class="input-group">
-                <label class="input-label">MoMo Account</label>
-                <input type="text" id="momoAccount" class="input-field" placeholder="MTN/Airtel Number">
-              </div>
-            </div>
-            
-            <div class="input-group">
-              <label class="input-label">Bank Account (Optional)</label>
-              <input type="text" id="bankAccount" class="input-field" placeholder="Bank Account Number">
-            </div>
-            
-            <div class="input-group">
-              <label class="input-label">Verification Code (SMS)</label>
-              <input type="text" id="verificationCode" class="input-field" placeholder="Enter 6-digit code" maxlength="6">
-            </div>
-            
-            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-              <button class="send-button" onclick="sendVerificationCode()" style="flex: 1;">
-                <i class="fas fa-sms"></i> Send SMS Code
-              </button>
-              <button class="send-button" onclick="verifyBidder()" style="flex: 1;">
-                <i class="fas fa-check-circle"></i> Complete Verification
-              </button>
-            </div>
-          </div>
         </div>
         
         <div id="bidRestrictions" class="bid-restrictions">
@@ -661,6 +784,152 @@
     </div>
   </div>
 
+  <!-- KYC Verification Popup -->
+  <div id="verificationPopup" class="popup-overlay">
+    <div class="verification-popup">
+      <div class="popup-header">
+        <button class="close-popup" onclick="closeVerificationPopup()">
+          <i class="fas fa-times"></i>
+        </button>
+        <h2 style="color: #fff; margin: 0; text-align: center;">
+          <i class="fas fa-shield-alt"></i> Secure Bidder Verification
+        </h2>
+        <p style="color: #aaa; text-align: center; margin: 0.5rem 0 0 0;">
+          Complete KYC verification to participate in secure auctions
+        </p>
+      </div>
+      
+      <div class="popup-content">
+        <div class="verification-steps">
+          <div class="step active" id="step1">
+            <div class="step-number">1</div>
+            <div class="step-title">Personal Info</div>
+          </div>
+          <div class="step" id="step2">
+            <div class="step-number">2</div>
+            <div class="step-title">Phone Verify</div>
+          </div>
+          <div class="step" id="step3">
+            <div class="step-number">3</div>
+            <div class="step-title">Payment Setup</div>
+          </div>
+          <div class="step" id="step4">
+            <div class="step-number">4</div>
+            <div class="step-title">Complete</div>
+          </div>
+        </div>
+
+        <div id="verificationContent" class="verification-form">
+          <!-- Step 1: Personal Information -->
+          <div id="personalInfo" class="verification-step">
+            <h3 style="color: #fff; margin-bottom: 1.5rem;">
+              <i class="fas fa-user"></i> Personal Information
+            </h3>
+            <p style="color: #aaa; margin-bottom: 2rem;">
+              Provide your official identification details for verification
+            </p>
+            
+            <div class="form-grid">
+              <div class="input-group">
+                <label class="input-label">Full Name (as on National ID)</label>
+                <input type="text" id="fullName" class="input-field" placeholder="John Doe">
+              </div>
+              <div class="input-group">
+                <label class="input-label">National ID Number</label>
+                <input type="text" id="nationalId" class="input-field" placeholder="1 XXXX X XXXXXXX X XX">
+              </div>
+            </div>
+            
+            <div class="input-group">
+              <label class="input-label">Date of Birth</label>
+              <input type="date" id="dateOfBirth" class="input-field">
+            </div>
+            
+            <button class="send-button" onclick="nextStep(2)">
+              Continue to Phone Verification <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <!-- Step 2: Phone Verification -->
+          <div id="phoneVerify" class="verification-step" style="display: none;">
+            <h3 style="color: #fff; margin-bottom: 1.5rem;">
+              <i class="fas fa-mobile-alt"></i> Phone Verification
+            </h3>
+            <p style="color: #aaa; margin-bottom: 2rem;">
+              Verify your phone number to secure your account
+            </p>
+            
+            <div class="input-group">
+              <label class="input-label">Phone Number</label>
+              <input type="tel" id="phoneNumber" class="input-field" placeholder="+250 7XX XXX XXX">
+            </div>
+            
+            <button class="send-button" onclick="sendVerificationCode()" style="margin-bottom: 1rem;">
+              <i class="fas fa-sms"></i> Send Verification Code
+            </button>
+            
+            <div class="input-group">
+              <label class="input-label">Verification Code</label>
+              <input type="text" id="verificationCode" class="input-field" placeholder="Enter 6-digit code" maxlength="6">
+            </div>
+            
+            <button class="send-button" onclick="verifyPhone()">
+              Verify Phone Number <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <!-- Step 3: Payment Setup -->
+          <div id="paymentSetup" class="verification-step" style="display: none;">
+            <h3 style="color: #fff; margin-bottom: 1.5rem;">
+              <i class="fas fa-credit-card"></i> Payment Setup
+            </h3>
+            <p style="color: #aaa; margin-bottom: 2rem;">
+              Link your payment methods for secure transactions
+            </p>
+            
+            <div class="form-grid">
+              <div class="input-group">
+                <label class="input-label">MoMo Account Number</label>
+                <input type="text" id="momoAccount" class="input-field" placeholder="MTN/Airtel Number">
+              </div>
+              <div class="input-group">
+                <label class="input-label">MoMo Provider</label>
+                <select id="momoProvider" class="input-field">
+                  <option value="">Select Provider</option>
+                  <option value="mtn">MTN Mobile Money</option>
+                  <option value="airtel">Airtel Money</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="input-group">
+              <label class="input-label">Bank Account (Optional)</label>
+              <input type="text" id="bankAccount" class="input-field" placeholder="Bank Account Number">
+            </div>
+            
+            <button class="send-button" onclick="completeVerification()">
+              Complete Verification <i class="fas fa-check-circle"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Success Animation -->
+        <div id="successAnimation" class="success-animation">
+          <div class="checkmark">
+            <i class="fas fa-check"></i>
+          </div>
+          <h2 style="color: #10b981; margin-bottom: 1rem;">Verification Complete!</h2>
+          <p style="color: #aaa; margin-bottom: 2rem;">
+            Your account has been successfully verified. You can now participate in secure bidding.
+          </p>
+          <button class="send-button" onclick="closeVerificationPopup()" style="max-width: 200px; margin: 0 auto;">
+            Start Bidding <i class="fas fa-gavel"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const activeAuctions = [
       {
@@ -692,20 +961,79 @@
     let chatMessages = [];
     let viewerCount = 1247;
     let isVerified = false;
-    let verificationStep = 0;
+    let verificationStep = 1;
     let verifiedBidders = new Set();
     let bannedUsers = new Set();
     let suspiciousActivity = new Map();
 
-    // Security and KYC functions
-    function startKYC() {
-      const kycForm = document.getElementById('kycForm');
-      const kycButton = document.getElementById('kycButton');
+    // Popup and verification functions
+    function openVerificationPopup() {
+      document.getElementById('verificationPopup').classList.add('active');
+      document.body.style.overflow = 'hidden'; // Prevent background scroll
+      addChatMessage('System', '🔒 KYC verification popup opened', false);
+    }
+
+    function closeVerificationPopup() {
+      document.getElementById('verificationPopup').classList.remove('active');
+      document.body.style.overflow = 'auto'; // Restore scroll
       
-      kycForm.classList.add('active');
-      kycButton.style.display = 'none';
+      if (isVerified) {
+        // Show success message and update main page
+        addChatMessage('System', '✅ Verification completed successfully! Welcome to secure bidding.', false);
+        updateMainPageAfterVerification();
+      }
+    }
+
+    function updateMainPageAfterVerification() {
+      // Update main page UI after successful verification
+      const verifiedData = JSON.parse(localStorage.getItem('verifiedBidder') || '{}');
+      updateVerificationStatus(verifiedData.name);
+      showBiddingSection();
+    }
+
+    function nextStep(step) {
+      // Validate current step before proceeding
+      if (step === 2) {
+        const fullName = document.getElementById('fullName').value;
+        const nationalId = document.getElementById('nationalId').value;
+        const dateOfBirth = document.getElementById('dateOfBirth').value;
+        
+        if (!fullName || !nationalId || !dateOfBirth) {
+          alert('Please fill in all required fields');
+          return;
+        }
+        
+        if (!nationalId.match(/^1\s?\d{4}\s?\d{1}\s?\d{7}\s?\d{1}\s?\d{2}$/)) {
+          alert('Please enter a valid Rwanda National ID format');
+          return;
+        }
+      }
       
-      addChatMessage('System', '🔒 KYC verification process started', false);
+      // Update step indicators
+      updateStepIndicators(step);
+      
+      // Show appropriate step content
+      document.querySelectorAll('.verification-step').forEach(el => el.style.display = 'none');
+      
+      if (step === 2) {
+        document.getElementById('phoneVerify').style.display = 'block';
+      } else if (step === 3) {
+        document.getElementById('paymentSetup').style.display = 'block';
+      }
+      
+      verificationStep = step;
+    }
+
+    function updateStepIndicators(currentStep) {
+      // Reset all steps
+      document.querySelectorAll('.step').forEach((step, index) => {
+        step.classList.remove('active', 'completed');
+        if (index + 1 < currentStep) {
+          step.classList.add('completed');
+        } else if (index + 1 === currentStep) {
+          step.classList.add('active');
+        }
+      });
     }
 
     function sendVerificationCode() {
@@ -719,31 +1047,60 @@
       const code = Math.floor(100000 + Math.random() * 900000);
       localStorage.setItem('verificationCode', code.toString());
       
-      alert(`SMS sent to ${phoneNumber}. Verification code: ${code} (Demo mode)`);
-      addChatMessage('SMS System', `📱 Verification code sent to ${phoneNumber.slice(-4).padStart(7, '*')}`, false);
+      // Show success feedback
+      const button = event.target;
+      const originalText = button.innerHTML;
+      button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+      button.disabled = true;
+      
+      setTimeout(() => {
+        button.innerHTML = '<i class="fas fa-check"></i> Code Sent!';
+        alert(`SMS sent to ${phoneNumber}. Verification code: ${code} (Demo mode)`);
+        
+        setTimeout(() => {
+          button.innerHTML = originalText;
+          button.disabled = false;
+        }, 2000);
+      }, 2000);
     }
 
-    function verifyBidder() {
-      const fullName = document.getElementById('fullName').value;
-      const nationalId = document.getElementById('nationalId').value;
+    function verifyPhone() {
       const phoneNumber = document.getElementById('phoneNumber').value;
-      const momoAccount = document.getElementById('momoAccount').value;
       const verificationCode = document.getElementById('verificationCode').value;
       const storedCode = localStorage.getItem('verificationCode');
       
-      // Validation
-      if (!fullName || !nationalId || !phoneNumber || !momoAccount || !verificationCode) {
-        alert('Please fill in all required fields');
-        return;
-      }
-      
-      if (!nationalId.match(/^1\s?\d{4}\s?\d{1}\s?\d{7}\s?\d{1}\s?\d{2}$/)) {
-        alert('Please enter a valid Rwanda National ID format');
+      if (!phoneNumber || !verificationCode) {
+        alert('Please enter phone number and verification code');
         return;
       }
       
       if (verificationCode !== storedCode) {
         alert('Invalid verification code. Please try again.');
+        return;
+      }
+      
+      // Phone verified, move to payment setup
+      nextStep(3);
+    }
+
+    function completeVerification() {
+      const fullName = document.getElementById('fullName').value;
+      const nationalId = document.getElementById('nationalId').value;
+      const phoneNumber = document.getElementById('phoneNumber').value;
+      const momoAccount = document.getElementById('momoAccount').value;
+      const momoProvider = document.getElementById('momoProvider').value;
+      const verificationCode = document.getElementById('verificationCode').value;
+      const storedCode = localStorage.getItem('verificationCode');
+      
+      // Final validation
+      if (!fullName || !nationalId || !phoneNumber || !momoAccount || !momoProvider) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      if (verificationCode !== storedCode) {
+        alert('Phone verification required. Please verify your phone number first.');
+        nextStep(2);
         return;
       }
       
@@ -753,20 +1110,30 @@
         return;
       }
       
-      // Successful verification
-      isVerified = true;
-      verifiedBidders.add(phoneNumber);
+      // Show loading animation
+      document.getElementById('verificationContent').style.display = 'none';
+      document.getElementById('successAnimation').classList.add('show');
+      updateStepIndicators(4);
       
-      updateVerificationStatus(fullName);
-      showBiddingSection();
-      
-      addChatMessage('Security System', `✅ ${fullName} has been verified as a legitimate bidder`, false);
-      localStorage.setItem('verifiedBidder', JSON.stringify({
-        name: fullName,
-        phone: phoneNumber,
-        verified: true,
-        timestamp: Date.now()
-      }));
+      // Complete verification process
+      setTimeout(() => {
+        isVerified = true;
+        verifiedBidders.add(phoneNumber);
+        
+        // Save verification data
+        localStorage.setItem('verifiedBidder', JSON.stringify({
+          name: fullName,
+          phone: phoneNumber,
+          nationalId: nationalId,
+          momoAccount: momoAccount,
+          momoProvider: momoProvider,
+          verified: true,
+          timestamp: Date.now()
+        }));
+        
+        // Add to chat
+        addChatMessage('Security System', `✅ ${fullName} has completed KYC verification`, false);
+      }, 1500);
     }
 
     function detectSuspiciousActivity(name, phone) {
