@@ -1,4 +1,3 @@
-
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
@@ -6,16 +5,49 @@
   <title>RwandaGov Live Auction Platform</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
+    :root {
+      /* Light theme colors */
+      --bg-primary: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      --bg-secondary: white;
+      --bg-tertiary: #f8fafc;
+      --text-primary: #333;
+      --text-secondary: #64748b;
+      --text-accent: #1e3a8a;
+      --border-color: #e2e8f0;
+      --shadow-light: rgba(0,0,0,0.1);
+      --shadow-heavy: rgba(0,0,0,0.15);
+      --card-bg: white;
+      --input-bg: white;
+      --nav-bg: rgba(30, 58, 138, 0.9);
+    }
+
+    [data-theme="dark"] {
+      /* Dark theme colors */
+      --bg-primary: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      --bg-secondary: #1e293b;
+      --bg-tertiary: #334155;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-accent: #60a5fa;
+      --border-color: #475569;
+      --shadow-light: rgba(0,0,0,0.3);
+      --shadow-heavy: rgba(0,0,0,0.5);
+      --card-bg: #1e293b;
+      --input-bg: #334155;
+      --nav-bg: rgba(15, 23, 42, 0.95);
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      color: #333;
+      background: var(--bg-primary);
+      color: var(--text-primary);
       line-height: 1.6;
     }
 
@@ -24,7 +56,7 @@
       background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
       color: white;
       padding: 1rem 0;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 20px var(--shadow-light);
     }
 
     .header-content {
@@ -71,6 +103,27 @@
       gap: 1rem;
     }
 
+    .theme-toggle {
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 0.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1.2rem;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255,255,255,0.3);
+      transform: rotate(180deg);
+    }
+
     .login-btn {
       background: rgba(255,255,255,0.2);
       border: 2px solid rgba(255,255,255,0.3);
@@ -89,7 +142,7 @@
 
     /* Navigation */
     .nav-bar {
-      background: rgba(30, 58, 138, 0.9);
+      background: var(--nav-bg);
       backdrop-filter: blur(10px);
       padding: 0.8rem 0;
       position: sticky;
@@ -139,18 +192,18 @@
 
     /* Auction Card */
     .auction-card {
-      background: white;
+      background: var(--card-bg);
       border-radius: 16px;
       padding: 1.5rem;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 8px 32px var(--shadow-light);
+      border: 1px solid var(--border-color);
       backdrop-filter: blur(10px);
       transition: all 0.3s ease;
     }
 
     .auction-card:hover {
       transform: translateY(-8px);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+      box-shadow: 0 16px 48px var(--shadow-heavy);
     }
 
     .auction-header {
@@ -163,7 +216,7 @@
     .auction-title {
       font-size: 1.3rem;
       font-weight: 700;
-      color: #1e3a8a;
+      color: var(--text-accent);
       margin-bottom: 0.5rem;
     }
 
@@ -184,7 +237,7 @@
     }
 
     .detail-item {
-      background: #f8fafc;
+      background: var(--bg-tertiary);
       padding: 1rem;
       border-radius: 12px;
       border-left: 4px solid #3b82f6;
@@ -192,7 +245,7 @@
 
     .detail-label {
       font-size: 0.8rem;
-      color: #64748b;
+      color: var(--text-secondary);
       font-weight: 600;
       margin-bottom: 0.3rem;
     }
@@ -200,7 +253,7 @@
     .detail-value {
       font-size: 1.1rem;
       font-weight: 700;
-      color: #1e293b;
+      color: var(--text-primary);
     }
 
     .countdown-timer {
@@ -221,7 +274,7 @@
     }
 
     .bidding-section {
-      border-top: 2px solid #e2e8f0;
+      border-top: 2px solid var(--border-color);
       padding-top: 1.5rem;
     }
 
@@ -234,10 +287,12 @@
     .bid-input {
       flex: 1;
       padding: 0.8rem 1rem;
-      border: 2px solid #e2e8f0;
+      border: 2px solid var(--border-color);
       border-radius: 12px;
       font-size: 1rem;
       transition: all 0.3s ease;
+      background: var(--input-bg);
+      color: var(--text-primary);
     }
 
     .bid-input:focus {
@@ -264,7 +319,7 @@
     }
 
     .bid-history {
-      background: #f8fafc;
+      background: var(--bg-tertiary);
       border-radius: 12px;
       padding: 1rem;
       max-height: 200px;
@@ -272,7 +327,7 @@
     }
 
     .bid-history h4 {
-      color: #475569;
+      color: var(--text-secondary);
       margin-bottom: 0.8rem;
       font-size: 0.9rem;
     }
@@ -282,7 +337,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 0.5rem 0;
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .bid-item:last-child {
@@ -297,10 +352,11 @@
     }
 
     .sidebar-card {
-      background: white;
+      background: var(--card-bg);
       border-radius: 16px;
       padding: 1.5rem;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 32px var(--shadow-light);
+      border: 1px solid var(--border-color);
     }
 
     .login-form {
@@ -319,16 +375,18 @@
       display: block;
       margin-bottom: 0.5rem;
       font-weight: 600;
-      color: #374151;
+      color: var(--text-primary);
     }
 
     .form-input {
       width: 100%;
       padding: 0.8rem;
-      border: 2px solid #e5e7eb;
+      border: 2px solid var(--border-color);
       border-radius: 8px;
       font-size: 1rem;
       transition: border-color 0.3s ease;
+      background: var(--input-bg);
+      color: var(--text-primary);
     }
 
     .form-input:focus {
@@ -363,19 +421,19 @@
     .stat-item {
       text-align: center;
       padding: 1rem;
-      background: #f8fafc;
+      background: var(--bg-tertiary);
       border-radius: 12px;
     }
 
     .stat-number {
       font-size: 1.8rem;
       font-weight: 700;
-      color: #1e3a8a;
+      color: var(--text-accent);
     }
 
     .stat-label {
       font-size: 0.8rem;
-      color: #64748b;
+      color: var(--text-secondary);
       margin-top: 0.2rem;
     }
 
@@ -460,8 +518,68 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.5; }
     }
+
+    /* Dark mode specific adjustments */
+    [data-theme="dark"] .bid-history::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    [data-theme="dark"] .bid-history::-webkit-scrollbar-track {
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+    }
+
+    [data-theme="dark"] .bid-history::-webkit-scrollbar-thumb {
+      background: var(--text-secondary);
+      border-radius: 4px;
+    }
+
+    [data-theme="dark"] .bid-history::-webkit-scrollbar-thumb:hover {
+      background: var(--text-primary);
+    }
+
+    /* Payment Modal Dark Mode */
+    #paymentModal {
+      background: rgba(0,0,0,0.8);
+    }
+
+    [data-theme="dark"] #paymentModal .modal-content {
+      background: var(--card-bg);
+      color: var(--text-primary);
+    }
+
+    /* Language switcher dark mode */
+    [data-theme="dark"] #languageSwitcher {
+      background: var(--input-bg);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    /* Export button dark mode */
+    [data-theme="dark"] .export-btn {
+      background: var(--text-accent) !important;
+      color: white;
+      border: 1px solid var(--border-color);
+    }
+
+    .export-btn {
+      padding: 0.8rem 1.5rem;
+      background: #1e3a8a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .export-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
+    }
   </style>
 </head>
+
 <!-- MTN MoMo Payment Simulation -->
 <script>
   async function initiateMTNMoMoPayment(amountRWF, auctionId) {
@@ -488,6 +606,7 @@
     initiateMTNMoMoPayment(amountRWF, auctionId);
   }
 </script>
+
 <!-- jsPDF Auction List Export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
@@ -515,12 +634,6 @@
   }
 </script>
 
-<!-- Export Button -->
-<div style="position:fixed; bottom:20px; right:20px; z-index:2000;">
-  <button onclick="generateAuctionPDF()" style="padding:0.8rem 1.5rem; background:#1e3a8a; color:white; border:none; border-radius:8px; font-weight:600;">
-    📄 Export Auction List (PDF)
-  </button>
-</div>
 <body>
   <!-- Header -->
   <header class="header">
@@ -539,6 +652,9 @@
           <div class="live-dot"></div>
           LIVE
         </div>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">
+          <i class="fas fa-moon" id="themeIcon"></i>
+        </button>
         <button class="login-btn" onclick="toggleLogin()">
           <i class="fas fa-user"></i> Login/Register
         </button>
@@ -579,31 +695,47 @@
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Login Form -->
-      <form>
-  <div class="form-group">
-    <label class="form-label">National ID Number</label>
-    <input type="text" class="form-input" placeholder="Enter your National ID">
-  </div>
-  <div class="form-group">
-    <label class="form-label">Email Address</label>
-    <input type="email" class="form-input" id="userEmail" placeholder="Enter your email">
-  </div>
-  <div class="form-group">
-    <label class="form-label">Phone Number (MTN)</label>
-    <input type="tel" class="form-input" id="userPhone" placeholder="e.g., 078XXXXXXX">
-  </div>
-  <div class="form-group">
-    <label class="form-label">Password</label>
-    <input type="password" class="form-input" placeholder="Enter password">
-  </div>
-  <button type="submit" class="form-btn">
-    <i class="fas fa-sign-in-alt"></i> Login
-  </button>
-</form>
+      <div class="sidebar-card" id="loginForm">
+        <h3 style="margin-bottom: 1rem; color: var(--text-accent);">
+          <i class="fas fa-user-circle"></i> User Account
+        </h3>
+        <form>
+          <div class="form-group">
+            <label class="form-label">National ID Number</label>
+            <input type="text" class="form-input" placeholder="Enter your National ID">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" id="userEmail" placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number (MTN)</label>
+            <input type="tel" class="form-input" id="userPhone" placeholder="e.g., 078XXXXXXX">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-input" placeholder="Enter password">
+          </div>
+          <button type="submit" class="form-btn">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </button>
+        </form>
+
+        <div id="userInfo" style="display: none;">
+          <div style="text-align: center; padding: 1rem;">
+            <i class="fas fa-user-circle" style="font-size: 3rem; color: var(--text-accent); margin-bottom: 1rem;"></i>
+            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">Welcome Back!</h4>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">John Rwigema</p>
+            <button onclick="logout()" class="form-btn" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+          </div>
+        </div>
+      </div>
 
       <!-- Live Statistics -->
       <div class="sidebar-card">
-        <h3 style="margin-bottom: 1rem; color: #1e3a8a;">
+        <h3 style="margin-bottom: 1rem; color: var(--text-accent);">
           <i class="fas fa-chart-bar"></i> Live Statistics
         </h3>
         <div class="stats-grid">
@@ -628,21 +760,21 @@
 
       <!-- Recent Activity -->
       <div class="sidebar-card">
-        <h3 style="margin-bottom: 1rem; color: #1e3a8a;">
+        <h3 style="margin-bottom: 1rem; color: var(--text-accent);">
           <i class="fas fa-activity"></i> Recent Activity
         </h3>
         <div id="recentActivity">
           <div class="bid-item">
             <span>New bid on Land Plot</span>
-            <span style="font-size: 0.8rem; color: #64748b;">2 min ago</span>
+            <span style="font-size: 0.8rem; color: var(--text-secondary);">2 min ago</span>
           </div>
           <div class="bid-item">
             <span>Vehicle auction ended</span>
-            <span style="font-size: 0.8rem; color: #64748b;">5 min ago</span>
+            <span style="font-size: 0.8rem; color: var(--text-secondary);">5 min ago</span>
           </div>
           <div class="bid-item">
             <span>New user registered</span>
-            <span style="font-size: 0.8rem; color: #64748b;">8 min ago</span>
+            <span style="font-size: 0.8rem; color: var(--text-secondary);">8 min ago</span>
           </div>
         </div>
       </div>
@@ -652,7 +784,63 @@
   <!-- Alert Container -->
   <div id="alertContainer"></div>
 
+  <!-- Language Switcher -->
+  <div style="position: fixed; top: 10px; right: 10px; z-index: 2000;">
+    <select id="languageSwitcher" onchange="switchLanguage()">
+      <option value="en">🇬🇧 English</option>
+      <option value="rw">🇷🇼 Kinyarwanda</option>
+      <option value="fr">🇫🇷 Français</option>
+    </select>
+  </div>
+
+  <!-- Export Button -->
+  <div style="position:fixed; bottom:20px; right:20px; z-index:2000;">
+    <button onclick="generateAuctionPDF()" class="export-btn">
+      📄 Export Auction List (PDF)
+    </button>
+  </div>
+
+  <!-- Payment Modal -->
+  <div id="paymentModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:3000; align-items:center; justify-content:center;">
+    <div class="modal-content" style="background:var(--card-bg); padding:2rem; border-radius:12px; max-width:400px; width:90%; text-align:center; color:var(--text-primary);">
+      <h2>Confirm Payment</h2>
+      <p>You won the auction! Click below to proceed with payment:</p>
+      <button onclick="simulatePayment()" style="padding:0.8rem 2rem; background:green; color:white; border:none; border-radius:8px; font-weight:bold; margin:1rem 0.5rem;">
+        Pay Now (Simulated)
+      </button>
+      <button onclick="closePaymentModal()" style="background:none; border:1px solid var(--border-color); color:var(--text-primary); padding:0.8rem 1rem; border-radius:8px; margin:1rem 0.5rem;">Cancel</button>
+    </div>
+  </div>
+
   <script>
+    // Theme Management
+    let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+    function initTheme() {
+      if (isDarkMode) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('themeIcon').className = 'fas fa-sun';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        document.getElementById('themeIcon').className = 'fas fa-moon';
+      }
+    }
+
+    function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      localStorage.setItem('darkMode', isDarkMode);
+      
+      if (isDarkMode) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('themeIcon').className = 'fas fa-sun';
+        showAlert('🌙 Dark mode activated', 'success');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        document.getElementById('themeIcon').className = 'fas fa-moon';
+        showAlert('☀️ Light mode activated', 'success');
+      }
+    }
+
     // Enhanced auction data with more details
     const auctionData = [
       {
@@ -712,6 +900,7 @@
 
     // Initialize the application
     function init() {
+      initTheme();
       renderAuctions();
       startLiveUpdates();
       updateStats();
@@ -739,7 +928,7 @@
         <div class="auction-header">
           <div>
             <div class="auction-title">${auction.title}</div>
-            <p style="color: #64748b; margin-bottom: 0.5rem;">${auction.description}</p>
+            <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">${auction.description}</p>
             <span style="background: #e0f2fe; color: #0369a1; padding: 0.2rem 0.8rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600;">
               <i class="fas fa-tag"></i> ${auction.category}
             </span>
@@ -790,7 +979,7 @@
               ${auction.bids.map(bid => `
                 <div class="bid-item">
                   <span><strong>RWF ${bid.amount.toLocaleString()}</strong> by ${bid.bidder}</span>
-                  <span style="font-size: 0.8rem; color: #64748b;">${bid.time}</span>
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">${bid.time}</span>
                 </div>
               `).join('')}
             </div>
@@ -868,7 +1057,7 @@
       newBidItem.className = 'bid-item';
       newBidItem.innerHTML = `
         <span><strong>RWF ${bidAmount.toLocaleString()}</strong> by You</span>
-        <span style="font-size: 0.8rem; color: #64748b;">${new Date().toLocaleTimeString()}</span>
+        <span style="font-size: 0.8rem; color: var(--text-secondary);">${new Date().toLocaleTimeString()}</span>
       `;
       bidsList.insertBefore(newBidItem, bidsList.firstChild);
 
@@ -894,7 +1083,7 @@
       userLoggedIn = true;
       currentUser = 'John Rwigema';
       
-      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('loginForm').querySelector('form').style.display = 'none';
       document.getElementById('userInfo').style.display = 'block';
       
       showAlert('Login successful!', 'success');
@@ -905,7 +1094,7 @@
       userLoggedIn = false;
       currentUser = null;
       
-      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('loginForm').querySelector('form').style.display = 'block';
       document.getElementById('userInfo').style.display = 'none';
       
       showAlert('Logged out successfully', 'success');
@@ -1001,7 +1190,7 @@
         newBidItem.className = 'bid-item';
         newBidItem.innerHTML = `
           <span><strong>RWF ${newBid.toLocaleString()}</strong> by Anonymous</span>
-          <span style="font-size: 0.8rem; color: #64748b;">${new Date().toLocaleTimeString()}</span>
+          <span style="font-size: 0.8rem; color: var(--text-secondary);">${new Date().toLocaleTimeString()}</span>
         `;
         bidsList.insertBefore(newBidItem, bidsList.firstChild);
         
@@ -1048,7 +1237,7 @@
       newActivity.className = 'bid-item';
       newActivity.innerHTML = `
         <span>${randomActivity}</span>
-        <span style="font-size: 0.8rem; color: #64748b;">${timeAgo} min ago</span>
+        <span style="font-size: 0.8rem; color: var(--text-secondary);">${timeAgo} min ago</span>
       `;
       
       activityContainer.insertBefore(newActivity, activityContainer.firstChild);
@@ -1085,6 +1274,12 @@
         renderAuctions();
         showAlert('Auctions refreshed!', 'success');
       }
+
+      // Alt + T to toggle theme
+      if (e.altKey && e.key === 't') {
+        e.preventDefault();
+        toggleTheme();
+      }
     });
 
     // Enhanced search and filter functionality
@@ -1106,7 +1301,7 @@
       
       if (filteredAuctions.length === 0) {
         container.innerHTML = `
-          <div style="text-align: center; padding: 2rem; color: #64748b;">
+          <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
             <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem;"></i>
             <h3>No auctions found</h3>
             <p>Try adjusting your search criteria</p>
@@ -1142,136 +1337,135 @@
       showAlert('An error occurred. Please refresh the page.', 'error');
     });
 
+    // Payment Modal Functions
+    function showPaymentModal() {
+      document.getElementById('paymentModal').style.display = 'flex';
+    }
+
+    function closePaymentModal() {
+      document.getElementById('paymentModal').style.display = 'none';
+    }
+
+    function sendNotification(message) {
+      console.log("📩 Sending notification: ", message);
+      // Placeholder for Twilio/Mailgun integration
+    }
+
+    // Language translations
+    const translations = {
+      en: {
+        title: "RwandaGov Auction Platform",
+        subtitle: "Transparent Government Asset Auctions - Republic of Rwanda",
+        login: "Login/Register",
+        home: "Home",
+        active: "Active Auctions",
+        completed: "Completed",
+        upcoming: "Upcoming",
+        help: "Help",
+        userAccount: "User Account",
+        loginBtn: "Login",
+        logoutBtn: "Logout",
+        payNow: "Pay Now (Simulated)",
+        confirmPayment: "Confirm Payment",
+        paymentMsg: "You won the auction! Click below to proceed with payment:",
+        darkMode: "Dark Mode",
+        lightMode: "Light Mode"
+      },
+      rw: {
+        title: "Urubuga rw'Ipiganwa rya Leta",
+        subtitle: "Ipiganwa ry'umutungo wa Leta mu mucyo - Repubulika y'u Rwanda",
+        login: "Injira/Andika",
+        home: "Ahabanza",
+        active: "Ipiganwa Riri Kuba",
+        completed: "Byarangiye",
+        upcoming: "Biteganyijwe",
+        help: "Ubufasha",
+        userAccount: "Konti y'Umukoresha",
+        loginBtn: "Injira",
+        logoutBtn: "Sohoka",
+        payNow: "Ishyura Ubu (Isesengura)",
+        confirmPayment: "Emeza Kwishyura",
+        paymentMsg: "Watsindiye ipiganwa! Kanda hasi kugira ngo wishyure:",
+        darkMode: "Ubushyuhe Bw'Ijoro",
+        lightMode: "Ubushyuhe Bw'Umunsi"
+      },
+      fr: {
+        title: "Plateforme d'enchères du Rwanda",
+        subtitle: "Enchères transparentes des biens publics - République du Rwanda",
+        login: "Connexion/Inscription",
+        home: "Accueil",
+        active: "Enchères en cours",
+        completed: "Terminées",
+        upcoming: "À venir",
+        help: "Aide",
+        userAccount: "Compte Utilisateur",
+        loginBtn: "Connexion",
+        logoutBtn: "Déconnexion",
+        payNow: "Payer maintenant (Simulation)",
+        confirmPayment: "Confirmer le paiement",
+        paymentMsg: "Vous avez gagné l'enchère ! Cliquez ci-dessous pour payer :",
+        darkMode: "Mode Sombre",
+        lightMode: "Mode Clair"
+      }
+    };
+
+    function switchLanguage() {
+      const lang = document.getElementById("languageSwitcher").value;
+      const t = translations[lang];
+
+      document.querySelector(".header-text h1").innerText = t.title;
+      document.querySelector(".header-text p").innerText = t.subtitle;
+      document.querySelector(".login-btn").innerHTML = `<i class="fas fa-user"></i> ${t.login}`;
+      
+      const navItems = document.querySelectorAll(".nav-item");
+      if (navItems.length >= 5) {
+        navItems[0].innerHTML = `<i class="fas fa-home"></i> ${t.home}`;
+        navItems[1].innerHTML = `<i class="fas fa-gavel"></i> ${t.active}`;
+        navItems[2].innerHTML = `<i class="fas fa-history"></i> ${t.completed}`;
+        navItems[3].innerHTML = `<i class="fas fa-calendar"></i> ${t.upcoming}`;
+        navItems[4].innerHTML = `<i class="fas fa-info-circle"></i> ${t.help}`;
+      }
+
+      const userAccountHeader = document.querySelector(".sidebar-card h3");
+      if (userAccountHeader) {
+        userAccountHeader.innerHTML = `<i class="fas fa-user-circle"></i> ${t.userAccount}`;
+      }
+
+      const loginButton = document.querySelector(".form-btn");
+      if (loginButton) {
+        loginButton.innerHTML = `<i class="fas fa-sign-in-alt"></i> ${t.loginBtn}`;
+      }
+
+      const logoutButton = document.querySelector("#userInfo button");
+      if (logoutButton) {
+        logoutButton.innerHTML = `<i class="fas fa-sign-out-alt"></i> ${t.logoutBtn}`;
+      }
+
+      const paymentModal = document.querySelector("#paymentModal h2");
+      if (paymentModal) {
+        paymentModal.innerText = t.confirmPayment;
+      }
+
+      const paymentMsg = document.querySelector("#paymentModal p");
+      if (paymentMsg) {
+        paymentMsg.innerText = t.paymentMsg;
+      }
+
+      const payButton = document.querySelector("#paymentModal button[onclick='simulatePayment()']");
+      if (payButton) {
+        payButton.innerText = t.payNow;
+      }
+
+      // Update theme toggle tooltip
+      const themeToggle = document.querySelector(".theme-toggle");
+      if (themeToggle) {
+        themeToggle.title = isDarkMode ? t.lightMode : t.darkMode;
+      }
+    }
+
     // Initialize application
     init();
     simulateWebSocket();
   </script>
-
-<!-- Language Switcher -->
-<div style="position: fixed; top: 10px; right: 10px; z-index: 2000;">
-  <select id="languageSwitcher" onchange="switchLanguage()" style="padding: 0.5rem; border-radius: 8px;">
-    <option value="en">🇬🇧 English</option>
-    <option value="rw">🇷🇼 Kinyarwanda</option>
-    <option value="fr">🇫🇷 Français</option>
-  </select>
-</div>
-
-<!-- Payment Modal -->
-<div id="paymentModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000a; z-index:3000; align-items:center; justify-content:center;">
-  <div style="background:white; padding:2rem; border-radius:12px; max-width:400px; width:90%; text-align:center;">
-    <h2>Confirm Payment</h2>
-    <p>You won the auction! Click below to proceed with payment:</p>
-    <button onclick="simulatePayment()" style="padding:0.8rem 2rem; background:green; color:white; border:none; border-radius:8px; font-weight:bold;">
-      Pay Now (Simulated)
-    </button>
-    <br/><br/>
-    <button onclick="closePaymentModal()" style="background:none; border:none; color:red;">Cancel</button>
-  </div>
-</div>
-
-<script>
-  function showPaymentModal() {
-    document.getElementById('paymentModal').style.display = 'flex';
-  }
-
-  function closePaymentModal() {
-    document.getElementById('paymentModal').style.display = 'none';
-  }
-
-  function simulatePayment() {
-    closePaymentModal();
-    showAlert("✅ Payment successful (simulated)", "success");
-    sendNotification("Payment completed for your auction win!");
-  }
-
-  function sendNotification(message) {
-    console.log("📩 Sending notification: ", message);
-    // Placeholder for Twilio/Mailgun integration
-  }
-
-  function switchLanguage() {
-    const lang = document.getElementById("languageSwitcher").value;
-    alert("Language switched to: " + lang + " (simulation only)");
-    // Future: load from language dictionary
-  }
-</script>
-
-
-<script>
-  const translations = {
-    en: {
-      title: "RwandaGov Auction Platform",
-      subtitle: "Transparent Government Asset Auctions - Republic of Rwanda",
-      login: "Login/Register",
-      home: "Home",
-      active: "Active Auctions",
-      completed: "Completed",
-      upcoming: "Upcoming",
-      help: "Help",
-      userAccount: "User Account",
-      loginBtn: "Login",
-      logoutBtn: "Logout",
-      payNow: "Pay Now (Simulated)",
-      confirmPayment: "Confirm Payment",
-      paymentMsg: "You won the auction! Click below to proceed with payment:"
-    },
-    rw: {
-      title: "Urubuga rw’Ipiganwa rya Leta",
-      subtitle: "Ipiganwa ry’umutungo wa Leta mu mucyo - Repubulika y’u Rwanda",
-      login: "Injira/Andika",
-      home: "Ahabanza",
-      active: "Ipiganwa Riri Kuba",
-      completed: "Byarangiye",
-      upcoming: "Biteganyijwe",
-      help: "Ubufasha",
-      userAccount: "Konti y'Umukoresha",
-      loginBtn: "Injira",
-      logoutBtn: "Sohoka",
-      payNow: "Ishyura Ubu (Isesengura)",
-      confirmPayment: "Emeza Kwishyura",
-      paymentMsg: "Watsindiye ipiganwa! Kanda hasi kugira ngo wishyure:"
-    },
-    fr: {
-      title: "Plateforme d'enchères du Rwanda",
-      subtitle: "Enchères transparentes des biens publics - République du Rwanda",
-      login: "Connexion/Inscription",
-      home: "Accueil",
-      active: "Enchères en cours",
-      completed: "Terminées",
-      upcoming: "À venir",
-      help: "Aide",
-      userAccount: "Compte Utilisateur",
-      loginBtn: "Connexion",
-      logoutBtn: "Déconnexion",
-      payNow: "Payer maintenant (Simulation)",
-      confirmPayment: "Confirmer le paiement",
-      paymentMsg: "Vous avez gagné l'enchère ! Cliquez ci-dessous pour payer :"
-    }
-  };
-
-  function switchLanguage() {
-    const lang = document.getElementById("languageSwitcher").value;
-    const t = translations[lang];
-
-    document.querySelector(".header-text h1").innerText = t.title;
-    document.querySelector(".header-text p").innerText = t.subtitle;
-    document.querySelector(".login-btn").innerText = t.login;
-    const navItems = document.querySelectorAll(".nav-item");
-    if (navItems.length >= 5) {
-      navItems[0].innerText = "🏠 " + t.home;
-      navItems[1].innerText = "📦 " + t.active;
-      navItems[2].innerText = "📜 " + t.completed;
-      navItems[3].innerText = "📅 " + t.upcoming;
-      navItems[4].innerText = "❓ " + t.help;
-    }
-    document.querySelector(".sidebar-card h3").innerHTML = `<i class="fas fa-user-circle"></i> ${t.userAccount}`;
-    document.querySelector(".form-btn").innerHTML = `<i class="fas fa-sign-in-alt"></i> ${t.loginBtn}`;
-    document.querySelector("#userInfo button").innerHTML = `<i class="fas fa-sign-out-alt"></i> ${t.logoutBtn}`;
-    document.querySelector("#paymentModal h2").innerText = t.confirmPayment;
-    document.querySelector("#paymentModal p").innerText = t.paymentMsg;
-    document.querySelector("#paymentModal button").innerText = t.payNow;
-  }
-</script>
-
 </body>
 </html>
