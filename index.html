@@ -682,6 +682,180 @@
       </a>
     </div>
   </nav>
+<!-- RSE Live Market Card -->
+<div class="sidebar-card" id="rseMarketCard">
+  <h3 style="margin-bottom: 1rem; color: var(--text-accent); display:flex; align-items:center; gap:0.5rem;">
+    <i class="fas fa-broadcast-tower"></i> RSE Live Market
+    <span class="live-indicator"><div class="live-dot"></div> LIVE</span>
+  </h3>
+
+  <!-- Stocks Table -->
+  <h4 class="section-title">📈 Stock Prices & Indices</h4>
+  <table class="rse-table">
+    <thead><tr><th>Stock</th><th>Price</th><th>Change</th></tr></thead>
+    <tbody id="rseStocks" class="loading-shimmer">
+      <tr><td colspan="3">Loading...</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Bonds Table -->
+  <h4 class="section-title">💰 Bond Listings</h4>
+  <table class="rse-table">
+    <thead><tr><th>Bond</th><th>Yield</th><th>Maturity</th></tr></thead>
+    <tbody id="rseBonds" class="loading-shimmer">
+      <tr><td colspan="3">Loading...</td></tr>
+    </tbody>
+  </table>
+
+  <!-- Exchange Rates -->
+  <h4 class="section-title">💱 Exchange Rates</h4>
+  <table class="rse-table">
+    <thead><tr><th>Currency</th><th>Buy</th><th>Sell</th></tr></thead>
+    <tbody id="rseRates" class="loading-shimmer">
+      <tr><td colspan="3">Loading...</td></tr>
+    </tbody>
+  </table>
+
+  <!-- News -->
+  <h4 class="section-title">📰 Market News</h4>
+  <ul id="rseNews" class="loading-shimmer" style="list-style:none; padding:0; font-size:0.85rem;">
+    <li>Loading...</li>
+  </ul>
+</div>
+
+<style>
+/* Live RSE Table */
+.rse-table {
+  width: 100%;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  border-collapse: collapse;
+}
+.rse-table th {
+  background: var(--bg-tertiary);
+  padding: 6px;
+  border-radius: 6px;
+}
+.rse-table td {
+  padding: 6px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: center;
+}
+
+/* Shimmer Effect for Loading */
+.loading-shimmer td, .loading-shimmer li {
+  background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s infinite;
+  color: transparent;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Price Change Flash Animation */
+.flash-green {
+  animation: flashGreen 1s ease;
+}
+.flash-red {
+  animation: flashRed 1s ease;
+}
+@keyframes flashGreen {
+  0% { background-color: rgba(16, 185, 129, 0.4); }
+  100% { background-color: transparent; }
+}
+@keyframes flashRed {
+  0% { background-color: rgba(239, 68, 68, 0.4); }
+  100% { background-color: transparent; }
+}
+</style>
+
+<script>
+// Simulated RSE Data
+let rseData = {
+  stocks: [
+    { name: "BOK", price: 285, change: "+2.5%" },
+    { name: "CTC", price: 140, change: "-1.2%" }
+  ],
+  bonds: [
+    { name: "FXD5/2025/15Yr", yield: "13.25%", maturity: "2038" },
+    { name: "FXD3/2025/5Yr", yield: "11.80%", maturity: "2030" }
+  ],
+  rates: [
+    { currency: "USD", buy: "1,275", sell: "1,285" },
+    { currency: "KES", buy: "8.50", sell: "8.65" }
+  ],
+  news: [
+    { title: "RSE Index Gains 0.5% Amid Heavy Trading", link: "https://rse.rw/market-statistics/Market-Prices/" },
+    { title: "New Corporate Bond Listed on RSE", link: "https://rse.rw/product-and-services/Listed-Companies/" }
+  ]
+};
+
+// Render Data
+function renderRSEData(newData) {
+  // Stocks
+  const stocksHTML = newData.stocks.map((s, i) => {
+    const oldPrice = rseData.stocks[i]?.price;
+    let flashClass = "";
+    if (oldPrice !== undefined) {
+      if (s.price > oldPrice) flashClass = "flash-green";
+      if (s.price < oldPrice) flashClass = "flash-red";
+    }
+    return `<tr class="${flashClass}">
+      <td>${s.name}</td>
+      <td>${s.price}</td>
+      <td style="color:${s.change.startsWith('+') ? 'green' : 'red'}">${s.change}</td>
+    </tr>`;
+  }).join("");
+  document.getElementById("rseStocks").innerHTML = stocksHTML;
+
+  // Bonds
+  document.getElementById("rseBonds").innerHTML = newData.bonds.map(b =>
+    `<tr>
+      <td>${b.name}</td>
+      <td>${b.yield}</td>
+      <td>${b.maturity}</td>
+    </tr>`).join("");
+
+  // Rates
+  document.getElementById("rseRates").innerHTML = newData.rates.map(r =>
+    `<tr>
+      <td>${r.currency}</td>
+      <td>${r.buy}</td>
+      <td>${r.sell}</td>
+    </tr>`).join("");
+
+  // News
+  document.getElementById("rseNews").innerHTML = newData.news.map(n =>
+    `<li><a href="${n.link}" target="_blank" style="color:var(--text-accent);">${n.title}</a></li>`
+  ).join("");
+
+  // Store latest data
+  rseData = newData;
+}
+
+// Simulate Live Updates
+function simulateRSEUpdates() {
+  const updatedData = JSON.parse(JSON.stringify(rseData));
+  updatedData.stocks.forEach(stock => {
+    const delta = Math.floor(Math.random() * 3) - 1; // -1, 0, +1
+    stock.price += delta;
+    if (delta > 0) stock.change = `+${(Math.random() * 3).toFixed(2)}%`;
+    if (delta < 0) stock.change = `-${(Math.random() * 3).toFixed(2)}%`;
+  });
+  renderRSEData(updatedData);
+}
+
+// First Load
+setTimeout(() => {
+  document.querySelectorAll(".loading-shimmer").forEach(el => el.classList.remove("loading-shimmer"));
+  renderRSEData(rseData);
+}, 1500);
+
+// Update Every 30s
+setInterval(simulateRSEUpdates, 30000);
+</script>
 
   <!-- Main Container -->
   <div class="main-container">
